@@ -27,7 +27,8 @@
     border: 1px solid transparent;
     margin: 5px;
 }
-.restaurant-card:hover{
+
+.restaurant-card:hover {
     border-color: #000;
     cursor: pointer;
 }
@@ -37,7 +38,7 @@
 
 }
 
-.res-logo{
+.res-logo {
     width: 100%;
     height: 150px;
     object-fit: cover;
@@ -47,7 +48,28 @@
     display: flex;
     flex-wrap: wrap;
 }
+
 .filter-btn {
     cursor: pointer;
     margin: 10px;
+}
+
+.shimmer-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shimmer-card {
+    height: 300px;
+    width: 200px;
+    background-color: #f0f0f0;
+    margin: 20px;
+}
+.login_btn{
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.filter{
+    display: flex;
 }
