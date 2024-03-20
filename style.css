@@ -19,6 +19,14 @@
     padding: 10px;
     margin: 10px;
 }
+.nav-items>ul>li>a{
+    text-decoration: none;
+    color: #0f0f0f;
+}
+.nav-items>ul>li>a:hover{
+    color: #3f3f3f;
+}
+
 
 .restaurant-card {
     width: 200px;
