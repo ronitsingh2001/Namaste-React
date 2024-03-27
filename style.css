@@ -30,7 +30,7 @@
 
 .restaurant-card {
     width: 200px;
-    /* height: 350px; */
+    /* height: fit-content; */
     padding: 5px;
     border: 1px solid transparent;
     margin: 5px;
@@ -55,6 +55,7 @@
 .restaurant-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .filter-btn {
@@ -80,4 +81,10 @@
 
 .filter{
     display: flex;
+}
+
+.link{
+    text-decoration: none;
+    text-decoration: none;
+    color: unset;
 }
