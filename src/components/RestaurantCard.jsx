@@ -9,7 +9,7 @@ const RestaurantCard = (props) => {
     <div className="restaurant-card" style={{ backgroundColor: "#f0f0f0" }}>
       <img
         className="res-logo"
-        src={CDN_URL  + cloudinaryImageId}
+        src={CDN_URL + cloudinaryImageId}
         alt="res-logo"
       />
       <h3>{name}</h3>
