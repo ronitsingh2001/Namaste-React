@@ -28,17 +28,19 @@ export const Body = () => {
   };
 
   const onlineStatus = useOnlineStatus();
-  console.log(onlineStatus)
-  if(!onlineStatus) return <h1>Looks like you're offline! Please check your internet connection.</h1>
+  if (!onlineStatus)
+    return (
+      <h1>Looks like you're offline! Please check your internet connection.</h1>
+    );
 
-  return filteredRestaurants.length === 0 ? (
+  return filteredRestaurants?.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
-      <div className="filter">
-        <div className="search">
+      <div className="flex">
+        <div className="search ps-5">
           <input
-            className="search-box"
+            className="border border-solid border-black"
             type="text"
             value={searchText}
             onChange={(e) => {
@@ -46,34 +48,53 @@ export const Body = () => {
             }}
           />
           <button
+            className="px-4 py-1 bg-green-200 m-4 rounded-lg"
             onClick={() => {
               const filteredList = listOfRestaurant.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
               );
-              setFilteredRestaurants(filteredList);
+              if (filteredList.length === 0) {
+                setFilteredRestaurants(null);
+              } else {
+                setFilteredRestaurants(filteredList);
+              }
             }}
           >
             Search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            const filteredList = listOfRestaurant.filter(
-              (res) => res.info.avgRating > 4.5
-            );
-            setFilteredRestaurants(filteredList);
-          }}
-        >
-          Top Rated Restaurants
-        </button>
+        <div>
+          <button
+            className="px-4 py-1 bg-gray-300 m-4 rounded-lg"
+            onClick={() => {
+              const filteredList = listOfRestaurant.filter(
+                (res) => res.info.avgRating > 4.2
+              );
+              if (filteredList.length === 0) {
+                setFilteredRestaurants(null);
+              }else{
+                setFilteredRestaurants(filteredList);
+              }
+            }}
+          >
+            Top Rated Restaurants
+          </button>
+        </div>
       </div>
-      <div className="restaurant-container">
-        {filteredRestaurants.map((res) => (
-          <Link key={res.info.id} className="link" to={"restaurant/" + res.info.id}>
-            <RestaurantCard resData={res} />
-          </Link>
-        ))}
+      <div className="restaurant-container flex flex-wrap border rounded-lg m-4">
+        {filteredRestaurants === null ? (
+          <h1 className="text-2xl font-bold p-4">No result found!</h1>
+        ) : (
+          filteredRestaurants.map((res) => (
+            <Link
+              key={res.info.id}
+              className="link"
+              to={"restaurant/" + res.info.id}
+            >
+              <RestaurantCard resData={res} />
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );
