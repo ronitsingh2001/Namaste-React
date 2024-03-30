@@ -1,41 +1,33 @@
-import { useEffect, useState } from "react";
-import RestaurantCard from "./RestaurantCard";
-import RESTAURANT_URL from "../utils/constants";
+import { useState } from "react";
+import RestaurantCard, { withRecommendedLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import useRestaurantList from "../utils/useRestaurantList";
 
 export const Body = () => {
-  const [listOfRestaurant, setListOfRestaurant] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const RestaurantCardRecommended = withRecommendedLabel(RestaurantCard);
 
-  const fetchData = async () => {
-    const data = await fetch(RESTAURANT_URL);
-    const jsonData = await data.json();
-    setListOfRestaurant(
-      jsonData?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
-    setFilteredRestaurants(
-      jsonData?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
-  };
-
+  let listOfRestaurant = useRestaurantList();
+  listOfRestaurant = listOfRestaurant?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+  ?.restaurants ?? [];
   const onlineStatus = useOnlineStatus();
+
+  if (listOfRestaurant?.length === 0) {
+    return <Shimmer />;
+  }
+
   if (!onlineStatus)
     return (
-      <h1>Looks like you're offline! Please check your internet connection.</h1>
+      <h1 className="font-bold text-xl p-4">
+        Looks like you're offline! Please check your internet connection.
+      </h1>
     );
 
-  return filteredRestaurants?.length === 0 ? (
-    <Shimmer />
-  ) : (
+  return (
     <div className="body">
       <div className="flex">
         <div className="search ps-5">
@@ -72,7 +64,7 @@ export const Body = () => {
               );
               if (filteredList.length === 0) {
                 setFilteredRestaurants(null);
-              }else{
+              } else {
                 setFilteredRestaurants(filteredList);
               }
             }}
@@ -85,13 +77,20 @@ export const Body = () => {
         {filteredRestaurants === null ? (
           <h1 className="text-2xl font-bold p-4">No result found!</h1>
         ) : (
-          filteredRestaurants.map((res) => (
+          (filteredRestaurants.length !== 0
+            ? filteredRestaurants
+            : listOfRestaurant
+          ).map((res) => (
             <Link
               key={res.info.id}
               className="link"
               to={"restaurant/" + res.info.id}
             >
-              <RestaurantCard resData={res} />
+              {res?.info?.avgRating > 4.3 ? (
+                <RestaurantCardRecommended resData={res} />
+              ) : (
+                <RestaurantCard resData={res} />
+              )}
             </Link>
           ))
         )}
