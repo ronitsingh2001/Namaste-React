@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import RestaurantCard, { withRecommendedLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import useRestaurantList from "../utils/useRestaurantList";
+import UserContext from "../utils/UserContext";
 
 export const Body = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
+  const { loggedInUser, setUser } = useContext(UserContext);
+
   const RestaurantCardRecommended = withRecommendedLabel(RestaurantCard);
 
   let listOfRestaurant = useRestaurantList();
-  listOfRestaurant = listOfRestaurant?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-  ?.restaurants ?? [];
+  listOfRestaurant =
+    listOfRestaurant?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+      ?.restaurants ?? [];
   const onlineStatus = useOnlineStatus();
 
   if (listOfRestaurant?.length === 0) {
@@ -32,7 +36,7 @@ export const Body = () => {
       <div className="flex">
         <div className="search ps-5">
           <input
-            className="border border-solid border-black"
+            className="border border-solid border-black px-1"
             type="text"
             value={searchText}
             onChange={(e) => {
@@ -71,6 +75,15 @@ export const Body = () => {
           >
             Top Rated Restaurants
           </button>
+        </div>
+        <div className="p-4">
+          <label htmlFor="">UserName : </label>
+          <input
+            type="text"
+            value={loggedInUser}
+            onChange={(e) => setUser(e.target.value)}
+            className="border-black border px-1"
+          />
         </div>
       </div>
       <div className="restaurant-container flex flex-wrap border rounded-lg m-4">
