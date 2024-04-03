@@ -1,7 +1,15 @@
 import React from "react";
-import { CDN_URL } from "../utils/constants";
+import { CDN_URL, LOGO_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { addItem } from "../utils/cartSlice";
 
 const ItemsList = ({ items }) => {
+  const dispatch = useDispatch();
+
+  const handleAddItem = (name) => {
+    dispatch(addItem(name))
+  };
+
   return (
     <ul>
       {items.map((item) => (
@@ -27,7 +35,7 @@ const ItemsList = ({ items }) => {
           </div>
           <div className="w-3/12 p-4">
             <div className="absolute">
-              <button className="p-2 bg-black text-white shadow-lg rounded-sm">
+              <button className="p-2 bg-black text-white shadow-lg rounded-sm" onClick={()=>handleAddItem(item)}>
                 Add +
               </button>
             </div>
@@ -35,6 +43,7 @@ const ItemsList = ({ items }) => {
               className="w-full"
               src={CDN_URL + item?.card?.info?.imageId}
               alt=""
+              onError={(e) => e.target.src = LOGO_URL}
             />
           </div>
         </li>
